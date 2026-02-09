@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   print_unsigned.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oduran-m <oduran-m@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/24 17:34:31 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/02/06 19:27:57 by oduran-m         ###   ########.fr       */
+/*   Created: 2026/02/07 20:56:24 by oduran-m          #+#    #+#             */
+/*   Updated: 2026/02/09 22:54:31 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
+#include "ft_printf.h"
 
-void	*ft_calloc(size_t num, size_t size)
+void	print_unsigned_recursive(unsigned int num)
 {
-	void			*ptr;
+	if (num > 9)
+		print_unsigned_recursive(num / 10);
+	print_char((char)(num % 10 + '0'));
+}
 
-	if (num == 0 || size == 0)
-		return (malloc(1));
-	if (num * size >= 2147483647)
-		return (NULL);
-	ptr = malloc (num * size);
-	if (!ptr)
-		return (NULL);
-	ft_bzero(ptr, num * size);
-	return (ptr);
+int	print_unsigned(unsigned int num)
+{
+	unsigned int	nb;
+	int				len;
+
+	nb = num;
+	len = 0;
+	if (num == 0)
+	{
+		return (print_char('0'));
+	}
+	while (nb > 0)
+	{
+		nb /= 10;
+		len++;
+	}
+	print_unsigned_recursive(num);
+	return (len);
 }

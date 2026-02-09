@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   print_char.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oduran-m <oduran-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/01 18:58:19 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/02/03 01:23:20 by oduran-m         ###   ########.fr       */
+/*   Created: 2026/02/06 22:32:19 by oduran-m          #+#    #+#             */
+/*   Updated: 2026/02/09 20:35:44 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
+#include "ft_printf.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+int	print_char(char word)
 {
-	char			*str;
-	unsigned int	i;
-
-	if (!s)
-		return (0);
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (s[i])
-	{
-		str[i] = f(i, s[i]);
-		++i;
-	}
-	str[i] = '\0';
-	return (str);
+	if (!write (1, &word, 1))
+		return (-1);
+	return (1);
 }

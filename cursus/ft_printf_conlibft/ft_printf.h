@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oduran-m <oduran-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/02 19:49:21 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/02/03 01:30:24 by oduran-m         ###   ########.fr       */
+/*   Created: 2026/02/06 19:59:18 by oduran-m          #+#    #+#             */
+/*   Updated: 2026/02/09 21:03:19 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list	*new_lst;
+# include <stdarg.h>
+# include "./libft/libft.h"
+# include <unistd.h>
 
-	if (lst)
-	{
-		if (*lst)
-		{
-			new_lst = ft_lstlast(*lst);
-			new_lst->next = new;
-		}
-		else
-			*lst = new;
-	}
-}
+int	ft_printf(const char *format, ...);
+int	print_char(char word);
+int	print_hex(unsigned int value, int asc);
+int	print_int(int num);
+int	print_pointer(unsigned long value);
+int	print_string(char *str);
+int	print_unsigned(unsigned int num);
+
+#endif

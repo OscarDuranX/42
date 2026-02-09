@@ -5,37 +5,41 @@
 #                                                     +:+ +:+         +:+      #
 #    By: oduran-m <oduran-m@student.42barcelon      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/12/18 22:47:21 by oduran-m          #+#    #+#              #
-#    Updated: 2026/02/03 18:43:08 by oduran-m         ###   ########.fr        #
+#    Created: 2026/02/06 19:51:21 by oduran-m          #+#    #+#              #
+#    Updated: 2026/02/08 18:24:10 by oduran-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
+NAME = libftprintf.a
+LIBFTNAME = libft.a
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
-SRC =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strlen.c \
-		ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c ft_strlcpy.c ft_strlcat.c \
-		ft_toupper.c ft_tolower.c ft_strchr.c ft_strrchr.c ft_strncmp.c ft_memchr.c \
-		ft_memcmp.c ft_strnstr.c ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c \
-		ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c ft_striteri.c \
-		ft_putchar_fd.c ft_putstr_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstadd_front.c \
-		ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c \
-		ft_lstiter.c ft_lstmap.c ft_putendl_fd.c		
+LIBFTDIR = ./libft
+
+SRC =	ft_printf.c print_char.c print_hex.c print_int.c print_pointer.c print_string.c \
+		print_unsigned.c
 OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+makelibft:
+		@make -C $(LIBFTDIR)
+		@cp $(LIBFTDIR)/$(LIBFTNAME) .
+		@mv $(LIBFTNAME) $(NAME)
+
+$(NAME): makelibft $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-%.o: %.c Makefile libft.h
+%.o: %.c Makefile libftprintf.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
+	cd $(LIBFTDIR) && make clean
 
 fclean: clean
 	rm -f $(NAME)
+	cd $(LIBFTDIR) && make fclean
 
 re: fclean all
 

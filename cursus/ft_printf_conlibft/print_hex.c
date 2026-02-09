@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   print_hex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oduran-m <oduran-m@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/24 18:06:15 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/02/03 02:13:54 by oduran-m         ###   ########.fr       */
+/*   Created: 2026/02/07 21:34:28 by oduran-m          #+#    #+#             */
+/*   Updated: 2026/02/07 21:49:30 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
+#include "ft_printf.h"
 
-char	*ft_strdup(const char *s)
+int	print_hex(unsigned int value, int asc)
 {
-	char	*tmp_str;
-	size_t	i;
+	char			buffer[20];
+	int				i;
+	int				len;
+	char			digit;
+	unsigned int	d;
 
-	tmp_str = (char *)malloc (sizeof(*s) * (ft_strlen(s) + 1));
-	if (!tmp_str)
-		return (NULL);
-	i = -1;
-	while (s[++i])
-		tmp_str[i] = s[i];
-	tmp_str[i] = '\0';
-	return (tmp_str);
+	len = 0;
+	i = 0;
+	if (value == 0)
+		return (print_char('0'));
+	while (value > 0)
+	{
+		d = value % 16;
+		if (d < 10)
+			digit = d + '0';
+		else
+			digit = d + asc;
+		buffer[i++] = digit;
+		value /= 16;
+	}
+	while (i--)
+		len += print_char(buffer[i]);
+	return (len);
 }

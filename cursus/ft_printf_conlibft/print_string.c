@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   print_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oduran-m <oduran-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/13 18:34:56 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/02/03 02:30:56 by oduran-m         ###   ########.fr       */
+/*   Created: 2026/02/06 22:35:20 by oduran-m          #+#    #+#             */
+/*   Updated: 2026/02/09 21:16:48 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+int	print_string(char *str)
 {
-	size_t	src_len;
-	size_t	i;
+	int	i;
 
 	i = 0;
-	src_len = ft_strlen(src);
-	if (size <= 0)
-		return (src_len);
-	while (src[i] && (i < (size - 1)))
+	if (!str)
+		return (print_string("(null)"));
+	while (str[i])
 	{
-		dst[i] = src[i];
+		if (print_char(str[i]) == -1)
+			return (-1);
 		i++;
 	}
-	dst[i] = '\0';
-	return (src_len);
+	return (i);
 }
