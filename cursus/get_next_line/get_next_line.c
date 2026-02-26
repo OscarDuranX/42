@@ -6,7 +6,7 @@
 /*   By: oduran-m <oduran-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 20:31:56 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/02/26 20:30:35 by oduran-m         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:47:06 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ char	*get_next_line(int fd)
 	static char	*stash;
 	char		*buffer;
 	char		*line;
-	size_t		amount;
+	char		*tmp;
+	ssize_t		amount;
 
 	if (fd < 0)
 		return (NULL);
@@ -80,18 +81,17 @@ char	*get_next_line(int fd)
 	while (!ft_strchr(stash, '\n') && amount > 0)
 	{
 		amount = read(fd, buffer, BUFFER_SIZE);
-		if (amount < 0)
-			return (free(buffer), NULL);
 		buffer[amount] = '\0';
 		stash = ft_strjoin(stash, buffer);
 	}
 	line = get_good_line(stash);
 	if (!line)
-		return (free(buffer), NULL);
+		return (free(stash), stash = NULL, free(buffer), NULL);
+	tmp = stash;
 	stash = get_bad_line(stash, ft_strlen(line));
-	free(buffer);
-	return (line);
+	return (free(tmp), free(buffer), line);
 }
+
 /*
 int	main(void)
 {
@@ -106,4 +106,19 @@ int	main(void)
 	printf("Resultat: \n%s\n", get_next_line(fd));
 	close(fd);
 	return (0);
+}*/
+/*
+int main(void)
+{
+    int     fd;
+    char    *line;
+
+    fd = open("hola", O_RDONLY);
+    while ((line = get_next_line(fd)))
+    {
+        printf("Resultat:\n%s\n", line);
+        free(line);
+    }
+    close(fd);
+    return (0);
 }*/
