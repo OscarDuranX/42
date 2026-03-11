@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oduran-m <oduran-m@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 20:31:56 by oduran-m          #+#    #+#             */
-/*   Updated: 2026/03/10 21:16:38 by oduran-m         ###   ########.fr       */
+/*   Updated: 2026/03/10 21:59:50 by oduran-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_good_line(char *str)
 {
@@ -83,20 +83,20 @@ char	*get_read_line(int fd, char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[4096];
 	char		*line;
 	char		*tmp;
 
 	if (fd < 0)
 		return (NULL);
-	stash = get_read_line(fd, stash);
-	if (!stash)
+	stash[fd] = get_read_line(fd, stash[fd]);
+	if (!stash[fd])
 		return (NULL);
-	line = get_good_line(stash);
+	line = get_good_line(stash[fd]);
 	if (!line)
-		return (free(stash), stash = NULL, NULL);
-	tmp = stash;
-	stash = get_bad_line(stash, ft_strlen(line));
+		return (free(stash[fd]), stash[fd] = NULL, NULL);
+	tmp = stash[fd];
+	stash[fd] = get_bad_line(stash[fd], ft_strlen(line));
 	return (free(tmp), line);
 }
 /*
