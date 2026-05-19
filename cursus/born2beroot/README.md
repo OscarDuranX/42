@@ -242,4 +242,21 @@ Es un lenguaje de programación. Se utiliza principalmente para desarrollar apli
 Necesitaremos instalar el PHP y ciertas dependencias:
 	$ sudo apt install php-fpm php-mysql php-curl php-gd php-zip -y
 Podremos verificar si se a instalado bien con el comando:
-	$ dpkg -l | grep php php -v
+	$ php -v
+Vamos a configurar el archivo de php:
+	$ sudo nano /etc/lighttpd/conf-available/15-fastcgi-php.com
+En el archivo lo vamos a configrar con estas lineas de codigo:
+"
+fastcgi.server = ( ".php" =>
+	( "localhost" =>
+		(
+			"socket" => "/run/php/php8.4-fpm.sock", // pon tu numero de version de php
+			"broken-scritfilname" => "enable"
+		)
+	)
+)
+"
+y vamos a resetear el servidio para aplicar la configuracion:
+	$ sudo lighty-enable-mod fastcgi
+	$ sudo lighty-enable-mod fastcgi-php
+
