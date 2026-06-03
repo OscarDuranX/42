@@ -160,6 +160,10 @@ reject_username    # Prohíbe usar el nombre de usuario en la contraseña
 difok=7            # Mínimo 7 caracteres distintos a la contraseña anterior
 enforce_for_root   # También se aplica al usuario root
 ```
+Canviar contrasenya:
+```bash
+sudo passwd oduran
+```
 
 ### Comprobar política aplicada
 
