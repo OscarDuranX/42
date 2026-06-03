@@ -1,5 +1,5 @@
+*Proyecto realizado como parte del currículo de 42 por **oduran-m*** 
 # Born2beroot – Debian + Bonus (Lighttpd, MariaDB, WordPress, Redis)
-*Proyecto realizado como parte del currículo de 42 por **oduran-m***  
 
 ---
 
