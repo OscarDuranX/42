@@ -491,4 +491,98 @@ ping                 # debe devolver PONG
 
 En el panel de WordPress: instalar el plugin **Redis Object Cache**, activarlo y comprobar que en *Status* aparece “Connected”.
 
+## 8. Comandos útiles para las correcciones
+
+### 8.1 Sistema y particiones
+
+```bash
+uname -a             # Info del kernel y la arquitectura
+lsblk                # Ver discos, particiones y LVM
+df -h                # Uso de disco por partición
+hostnamectl          # Nombre de host y SO
+```
+
+### 8.2 Usuarios, grupos y contraseñas
+
+```bash
+getent passwd oduran                        # Ver que el usuario existe
+getent group sudo                           # Ver miembros del grupo sudo
+id oduran                                   # UID, GID y grupos del usuario
+sudo chage -l oduran                        # Política de caducidad de la contraseña
+sudo grep '^PASS_' /etc/login.defs          # Ver PASS_MAX_DAYS, etc.
+sudo grep pwquality /etc/pam.d/common-password   # Reglas de complejidad
+```
+
+### 8.3 `sudo` y seguridad
+
+```bash
+sudo -V                                  # Versión de sudo y ruta de sudoers
+sudo grep '^Defaults' /etc/sudoers       # Opciones env_reset, logfile, etc.
+sudo tail -n 20 /var/log/sudo.log        # Últimos registros de sudo
+journalctl _COMM=sudo | tail -n 10       # Logs de sudo en journalctl
+```
+
+### 8.4 Firewall (UFW)
+
+```bash
+sudo ufw status verbose   # Comprobar que está activo y reglas detalladas
+sudo ufw status numbered  # Ver reglas con número
+```
+
+### 8.5 SSH
+
+```bash
+sudo systemctl status ssh                         # Estado del servicio SSH
+sudo grep -E 'Port|PermitRootLogin' /etc/ssh/sshd_config
+sudo ss -tlnp | grep 4242                         # Ver que escucha en el puerto 4242
+ssh <user>@localhost -p 4242                      # Probar la conexión desde la máquina real
+```
+
+### 8.6 Script de monitorización y cron
+
+```bash
+sudo ls -l /usr/local/bin/monitoring.sh   # Ver permisos (debe ser 755)
+sudo crontab -u root -l                   # Ver la línea */10 * * * * ...
+sudo systemctl status cron                # Estado del servicio cron
+sudo /usr/local/bin/monitoring.sh         # Ejecutar el script manualmente
+```
+
+### 8.7 Servicios bonus
+
+#### Lighttpd
+
+```bash
+sudo systemctl status lighttpd
+sudo ss -tlnp | grep 80
+```
+
+#### MariaDB
+
+```bash
+sudo systemctl status mariadb
+sudo mariadb -e "SHOW DATABASES;"
+```
+
+#### PHP
+
+```bash
+php -v
+sudo ls /etc/lighttpd/conf-available/15-fastcgi-php.conf
+```
+
+#### WordPress
+
+```bash
+ls -l /var/www/html/
+sudo grep DB_NAME /var/www/html/wp-config.php
+```
+
+#### Redis
+
+```bash
+sudo systemctl status redis-server
+redis-cli ping                 # Debe devolver PONG
+redis-cli auth @Iloveecole42   # Debe devolver OK
+sudo grep requirepass /etc/redis/redis.conf
+```
 ---
