@@ -121,61 +121,113 @@ class LogProcessor(DataProcessor):
                 self._processed_count += 1
 
 
-def main() -> None:
-    print("=== Code Nexus - Data Processor ===", end="\n\n")
+class DataStream:
+    """Adaptive stream processor that routes data to the right DataProcessor"""
 
+    def __init__(self) -> None:
+        # Lista de processadores registrados (NumericProcessor, TextProcessor
+        # LogProcessor, etc.)
+        self._processors: list[DataProcessor] = []
+
+    def register_processor(self, proc: DataProcessor) -> None:
+        """Register a new data processir to handle elements in the stream."""
+        self._processors.append(proc)
+
+    def process_stream(self, stream: list[Any]) -> None:
+        """Analyze each element and send it to an appropiate processor."""
+        for element in stream:
+            handled = False
+
+            for proc in self._processors:
+                if proc.validate(element):
+                    proc.ingest(element)
+                    handled = True
+                    break   # ya hemos encontrado un procesador valido de los 3
+
+            if not handled:
+                print("DataStream error - Can't process element in stream:"
+                      f" {element}")
+
+    def print_processors_stats(self) -> None:
+        """Print statistics about each registered processor."""
+        print("== DataStream statistics ==")
+        if not self._processors:
+            print("No processors found, no data")
+            return
+
+        for proc in self._processors:
+            total = proc._processed_count
+            remaining = len(proc._buffer)
+            name = proc.__class__.__name__
+
+            print(f"{name}: total {total} items processed, remaining"
+                  f" {remaining} on processor")
+
+
+def main() -> None:
+    # Inicializar DataStream
+    stream = DataStream()
+    print("Initialize Data Stream...")
+    stream.print_processors_stats()
+    print()
+
+    # Registrar solo NumericProcessor
     num = NumericProcessor()
+    stream.register_processor(num)
+    print("Registering Numeric Processor", end="\n\n")
+
+    # primer batch de datos
+    batch = [
+        "Hello world",
+        [3.14, -1, 2.71],
+        [
+            {
+                "log_level": "WARNING",
+                "log_message": "Telnet access! Use ssh instead"
+            },
+            {
+                 "log_level": "INFO",
+                 "log_message": "User wili s connected"
+            },
+        ],
+        42,
+        ["Hi", "five"],
+    ]
+    print(f"Send frist batch of data on stream: {batch}")
+
+    stream.process_stream(batch)
+    stream.print_processors_stats()
+    print()
+    # Registrar otros procesadores
     txt = TextProcessor()
     log = LogProcessor()
+    stream.register_processor(txt)
+    stream.register_processor(log)
+    print("Registering other data processors")
 
-    print("Testing NumericProcessir...")
-    print(f"Trying to validate input '42': {num.validate(42)}")
-    print(f"Trying to validate input 'Hello': {num.validate('Hello')}")
+    print("Send the same batch again")
+    stream.process_stream(batch)
+    stream.print_processors_stats()
+    print()
 
-    print("Test invalid ingestion of string 'foo' without prior validation:")
-    try:
-        num.ingest("foo")  # debe lanzar ValueError
-    except ValueError as e:
-        print(f"Got exception: {e}")
-
-    print("Processing data: [1, 2, 3, 4, 5]")
-    num.ingest([1, 2, 3, 4, 5])
-    print("Extraction 3 value...")
+    # Consumir algunos elementos con output()
+    print("Consume some elements from the date processors: Numeric 3, Text 2,"
+          " Log 1")
+    # Numeric: sacar 3
     for _ in range(3):
         rank, value = num.output()
-        print(f"Numerci value {rank}: {value}")
-
-    print()
-    print("Testing TextProcessor...")
-    print(f"Trying to validate input '42': {txt.validate(42)}")
-    texts = ["Hello", "Nexus", "World"]
-    print(f"Processing data: {texts}")
-    txt.ingest(texts)
-    print("Extracting 1 value...")
-    rank, value = txt.output()
-    print(f"Text value 0: {value}")
-
-    print()
-    print("Testing LogProcessor...")
-    print(f"Trying to validate input 'Hello': {log.validate('Hello')}")
-    logs = [
-        {
-            "log_level": "NOTICE",
-            "log_message": "Connection to server"
-        },
-        {
-            "log_level": "ERROR",
-            "log_message": "Unauthorized access!!"
-        }
-    ]
-
-    print(f"Processing data: {logs}")
-    log.ingest(logs)
-    print("Extracting 2 values...")
+        print(f"Numeric value {rank}: {value}")
+    # Text: sacar 2
     for _ in range(2):
-        rank, value = log.output()
-        print(f"Log entry {rank}: {value}")
+        rank, value = txt.output()
+        print(f"Text value {rank}: {value}")
+    # Log: sacar 1
+    rank, value = log.output()
+    print(f"Log entry {rank}: {value}")
+    print()
+    stream.print_processors_stats()
 
 
 if __name__ == "__main__":
+    print("=== Code Nexus - Data Stream ===", end="\n\n")
     main()
