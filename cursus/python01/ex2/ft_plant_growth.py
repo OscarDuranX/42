@@ -17,7 +17,6 @@ class Plant:
 if __name__ == "__main__":
     rose = Plant("Rose", 25.0, 30)
 
-
     print("=== Garden Plant Growth ===")
     rose.show()
     initial_height = rose.height
@@ -27,7 +26,6 @@ if __name__ == "__main__":
         rose.grow()
         rose.age_one_day()
         rose.show()
-
 
     total_growth = rose.height - initial_height
     print(f"Growth this week: {round(total_growth, 1)}cm")

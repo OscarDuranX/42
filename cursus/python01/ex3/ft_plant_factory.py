@@ -8,7 +8,7 @@ class Plant:
         print(f"{self.name}: {round(self.height, 1)}cm, {self.age} days old")
 
 
-if __name__ == "__main__":
+def factory() -> None:
     rose = Plant("Rose", 25.0, 30)
     oak = Plant("Oak", 200.0, 365)
     cactus = Plant("Cactus", 5.0, 90)
@@ -20,3 +20,7 @@ if __name__ == "__main__":
     for plant in plants:
         print("Created: ", end="")
         plant.show()
+
+
+if __name__ == "__main__":
+    factory()
