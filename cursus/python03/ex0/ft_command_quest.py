@@ -2,7 +2,7 @@ import sys
 
 
 def main() -> None:
-    print("=== CommandQuest===")
+    print("=== Command Quest ===")
 
     program_name = sys.argv[0]
     print(f"Program name: {program_name}")
