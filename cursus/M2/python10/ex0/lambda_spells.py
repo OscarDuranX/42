@@ -1,7 +1,8 @@
 from data_generator import FuncMageDataGenerator
+from typing import Any
 
 
-def artifact_sorter(artifacts: list[dict]) -> list[dict]:
+def artifact_sorter(artifacts: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Return artifcats sorted by descending power."""
     return sorted(
         artifacts,
@@ -10,7 +11,9 @@ def artifact_sorter(artifacts: list[dict]) -> list[dict]:
     )
 
 
-def power_filter(mages: list[dict], min_power: int) -> list[dict]:
+def power_filter(
+        mages: list[dict[str, Any]],
+        min_power: int) -> list[dict[str, Any]]:
     """Return mages whose power meets the requested minimum."""
     return list(
         filter(
@@ -30,7 +33,7 @@ def spell_transformer(spells: list[str]) -> list[str]:
     )
 
 
-def mage_stats(mages: list[dict]) -> dict:
+def mage_stats(mages: list[dict[str, Any]]) -> dict[str, int | float]:
     """Return maximum, minimum, and average mage power."""
     strongest_mage = max(
         mages,
@@ -50,8 +53,8 @@ def mage_stats(mages: list[dict]) -> dict:
     )
 
     return {
-        "max_power": strongest_mage,
-        "min_power": weakest_mage,
+        "max_power": strongest_mage["power"],
+        "min_power": weakest_mage["power"],
         "avg_power": round(total_power / len(mages), 2),
     }
 
