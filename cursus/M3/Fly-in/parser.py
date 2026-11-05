@@ -60,7 +60,7 @@ def parse_hub(parts: list[str], line_number: int) -> Hub:
 
     if invalid_keys:
         invalid_key = invalid_keys.pop()
-        raise parseError(
+        raise ParseError(
             f"Line {line_number}: unknown metadata '{invalid_key}'"
         )
 
