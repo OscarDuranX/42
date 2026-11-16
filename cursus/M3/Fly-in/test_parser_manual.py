@@ -1,9 +1,12 @@
-from parser import parse_file
+"""Prueba manual del parser con un mapa valido."""
+
 from graph import Graph
+from parser import MapParser
+
 
 def main() -> None:
-    """Prueba manual del parser con un mapa válido."""
-    game_map = parse_file("maps/02_simple_fork.txt")
+    """Imprime el contenido parseado de un mapa y sus vecinos."""
+    game_map = MapParser().parse_file("maps/02_simple_fork.txt")
 
     print("Drones:", game_map.drone_count)
     print("Start:", game_map.start_hub)
@@ -12,10 +15,8 @@ def main() -> None:
     print("\nHubs:")
     for name, hub in game_map.hubs.items():
         print(
-            f"- {name}: ({hub.x}, {hub.y}), "
-            f"type={hub.zone_type}, "
-            f"color={hub.color}, "
-            f"capacity={hub.max_drones}"
+            f"- {name}: ({hub.x}, {hub.y}), type={hub.zone_type.value}, "
+            f"color={hub.color}, capacity={game_map.zone_capacity(name)}"
         )
 
     print("\nConnections:")
@@ -26,7 +27,7 @@ def main() -> None:
         )
 
     graph = Graph(game_map)
-
+    print("\nNeighbors:")
     for hub_name in game_map.hubs:
         print(f"{hub_name} -> {graph.neighbors(hub_name)}")
 

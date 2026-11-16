@@ -1,15 +1,13 @@
-SHELL		:= /bin/bash
-VENV		:= venv
-ACTIVATE	:= source $(VENV)/bin/activate
-MAP		?= maps/easy/01_linear_path.txt
+SHELL    := /bin/bash
+VENV     := venv
+ACTIVATE := source $(VENV)/bin/activate
+MAP      ?= maps/easy/01_linear_path.txt
 
-
-# Crea entorno virtual si no existe, si existe, no hace nada.
+# Crea el entorno virtual solo si no existe (si ya existe, no hace nada).
 $(VENV)/bin/activate:
 	python3 -m venv $(VENV)
 
-
-# Instala pydantic si todavia no esta instalado.
+# Instala pydantic dentro del venv solo si todavia no esta instalado.
 install: $(VENV)/bin/activate
 	$(ACTIVATE) && \
 	if python -c "import pydantic" 2>/dev/null; then \
@@ -17,8 +15,8 @@ install: $(VENV)/bin/activate
 	else \
 		pip install pydantic; \
 	fi
- 
-# Herramientas de desarrollo
+
+# Herramientas de desarrollo (lint y tests), tambien dentro del venv.
 install-dev: install
 	$(ACTIVATE) && \
 	if python -c "import flake8, mypy, pytest" 2>/dev/null; then \
@@ -26,6 +24,10 @@ install-dev: install
 	else \
 		pip install flake8 mypy pytest; \
 	fi
+
+# Abre una shell interactiva ya dentro del venv (salir con 'exit').
+shell: install
+	$(ACTIVATE) && exec $$SHELL
 
 run: install
 	$(ACTIVATE) && python main.py $(MAP)
@@ -48,10 +50,10 @@ lint-strict: install-dev
 
 clean:
 	find . -type d -name "__pycache__" -not -path "./$(VENV)/*" \
-		-prune -exec rm -rf {} + 
+		-prune -exec rm -rf {} +
 	rm -rf .mypy_cache .pytest_cache
 
 fclean: clean
 	rm -rf $(VENV)
 
-.PHONY: install install-dev run debug test lint lint-strict clean fclean
+.PHONY: install install-dev shell run debug test lint lint-strict clean fclean
